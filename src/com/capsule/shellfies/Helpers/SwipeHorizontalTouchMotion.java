@@ -21,9 +21,9 @@ public abstract class SwipeHorizontalTouchMotion implements OnTouchListener {
 
 		@Override
 		public boolean onDown(MotionEvent e) {
-			return true;
+			return false;
 		}
-		
+
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 				float velocityY) {
@@ -41,15 +41,9 @@ public abstract class SwipeHorizontalTouchMotion implements OnTouchListener {
 						}
 					}
 					result = true;
-				} else if (Math.abs(diffY) > SWIPE_THRESHOLD
-						&& Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-					if (diffY > 0) {
-						onSwipeBottom();
-					} else {
-						onSwipeTop();
-					}
+				} else {
+					result = false;
 				}
-				result = true;
 
 			} catch (Exception exception) {
 				exception.printStackTrace();
@@ -59,33 +53,11 @@ public abstract class SwipeHorizontalTouchMotion implements OnTouchListener {
 	}
 
 	public abstract void onSwipeRight();
+
 	public abstract void onSwipeLeft();
-	public abstract void onSwipeTop();
-	public abstract void onSwipeBottom();	
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		return gestureDetector.onTouchEvent(event);
-//
-//		switch (event.getAction()) {
-//		case MotionEvent.ACTION_DOWN: {
-//			startClickTime = Calendar.getInstance().getTimeInMillis();
-//			Log.d(Constants.LOG, "container action down (" + Long.toString(startClickTime) + ")");
-//			break;
-//		}
-//
-//		case MotionEvent.ACTION_UP: {
-//			long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
-//			Log.d(Constants.LOG, "container action up (" + Long.toString(clickDuration) + ")");
-//			if (clickDuration < Constants.MAX_CLICK_DURATION) {
-//				v.performClick();
-//				return true;
-//			}else{
-//				return gestureDetector.onTouchEvent(event);
-//			}
-//		}
-//		}
-//		
-//		return false;
 	}
 }
