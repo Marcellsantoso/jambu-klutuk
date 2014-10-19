@@ -6,9 +6,8 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.capsule.shellfies.R;
 import com.capsule.shellfies.Helpers.ArtbokFetch;
@@ -28,8 +27,6 @@ import com.comcast.freeflow.layouts.VLayout;
 public class FragmentGrid extends BaseFragmentShellfies {
 	@InjectView(R.id.ffContainer)
 	private FreeFlowContainer container;
-	@InjectView(R.id.btn)
-	private Button btnChange;
 
 	private ArtbookLayout custom;
 	private VGridLayout grid;
@@ -39,6 +36,7 @@ public class FragmentGrid extends BaseFragmentShellfies {
 	private int itemsPerPage = 25;
 	private int pageIndex = 1;
 	private int currLayoutIndex = 0;
+	private float scrollY = 0;
 
 	private FreeFlowLayout[] layouts;
 
@@ -88,13 +86,6 @@ public class FragmentGrid extends BaseFragmentShellfies {
 
 		fetch.load(this, itemsPerPage, pageIndex);
 
-		btnChange.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				changeLayout(currLayoutIndex + 1);
-			}
-		});
 	}
 
 	@SuppressLint("ClickableViewAccessibility")
@@ -103,35 +94,11 @@ public class FragmentGrid extends BaseFragmentShellfies {
 	public void onDataLoaded(ArtbookFeed feed) {
 		adapter.update(feed);
 		container.dataInvalidated();
-		container.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AbsLayoutContainer parent,
-					FreeFlowItem proxy) {
 
-			}
-		});
-
-		container.addScrollListener(new OnScrollListener() {
-
-			@Override
-			public void onScroll(FreeFlowContainer container) {
-
-			}
-		});
-
-		container.setOnTouchListener(new SwipeHorizontalTouchMotion(
-				getActivity()) {
-
-			public void onSwipeRight() {
-				changeLayout(currLayoutIndex + 1);
-			}
-
-			@Override
-			public void onSwipeLeft() {
-				changeLayout(currLayoutIndex - 1);
-			}
-
-		});
+		// Add listeners to this container
+		container.setOnItemClickListener(ListenerItemClick);
+		container.addScrollListener(ListenerScroll);
+		container.setOnTouchListener(ListenerSwipe);
 	}
 
 	/**
@@ -152,4 +119,43 @@ public class FragmentGrid extends BaseFragmentShellfies {
 		container.setLayout(layouts[layoutIndex]);
 	}
 
+	// ================================================================================
+	// Listeners
+	// ================================================================================
+	public OnScrollListener ListenerScroll = new OnScrollListener() {
+
+		@Override
+		public void onScroll(FreeFlowContainer container) {
+			// Get current position
+			float percentY = container.getScrollPercentY();
+
+			// Decide whether to display or show
+			displayActionBar(percentY, scrollY);
+			
+			// Update value
+			scrollY = percentY;
+		}
+	};
+
+	public OnTouchListener ListenerSwipe = new SwipeHorizontalTouchMotion(
+			getActivity()) {
+
+		@Override
+		public void onSwipeRight() {
+			changeLayout(currLayoutIndex + 1);
+		}
+
+		@Override
+		public void onSwipeLeft() {
+			changeLayout(currLayoutIndex - 1);
+		}
+	};
+
+	public OnItemClickListener ListenerItemClick = new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AbsLayoutContainer parent, FreeFlowItem proxy) {
+			// Empty function for now
+		}
+	};
 }

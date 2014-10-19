@@ -14,6 +14,22 @@ public abstract class SwipeHorizontalTouchMotion implements OnTouchListener {
 		gestureDetector = new GestureDetector(ctx, new GestureListener());
 	}
 
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		return gestureDetector.onTouchEvent(event);
+	}
+	
+	//================================================================================
+    // Abstract Methods
+    //================================================================================
+	public abstract void onSwipeRight();
+
+	public abstract void onSwipeLeft();
+
+	
+	//================================================================================
+    // Inner Classes
+    //================================================================================
 	private final class GestureListener extends SimpleOnGestureListener {
 
 		private static final int SWIPE_THRESHOLD = 100;
@@ -50,14 +66,5 @@ public abstract class SwipeHorizontalTouchMotion implements OnTouchListener {
 			}
 			return result;
 		}
-	}
-
-	public abstract void onSwipeRight();
-
-	public abstract void onSwipeLeft();
-
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		return gestureDetector.onTouchEvent(event);
 	}
 }

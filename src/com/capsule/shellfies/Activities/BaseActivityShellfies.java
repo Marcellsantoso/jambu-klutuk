@@ -11,9 +11,9 @@ public class BaseActivityShellfies extends RoboSherlockFragmentActivity
 		implements IntContainer {
 	private int containerId;
 
-	/******************************************
-	 * FRAGMENT FUNCTIONS
-	 ****************************************/
+	// ================================================================================
+	// Fragment Functions
+	// ================================================================================
 	/**
 	 * Add fragment on top of the current one
 	 * 
@@ -69,8 +69,39 @@ public class BaseActivityShellfies extends RoboSherlockFragmentActivity
 	/**
 	 * MUST set if want to use fragment methods
 	 */
-	@Override
 	public void setContainerId(int containerId) {
 		this.containerId = containerId;
 	}
+
+	//================================================================================
+    // Behavior Controller
+    //================================================================================
+	/**
+	 * Controls behavior of the back button
+	 */
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		// Remove circle loading progress on top right corner
+		setSupportProgressBarIndeterminateVisibility(false);
+		
+		// Only close apps when there's no backstack
+		if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
+			BaseActivityShellfies.this.finish();
+		} else {
+			super.onBackPressed();
+		}
+	}
+
+	// ================================================================================
+	// Hide / Show ActionBar functions
+	// ================================================================================
+	public void hideTopBar() {
+		getSupportActionBar().hide();
+	}
+
+	public void showTopBar() {
+		getSupportActionBar().show();
+	}
+
 }

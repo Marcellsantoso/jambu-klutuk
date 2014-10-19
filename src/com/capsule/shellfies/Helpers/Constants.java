@@ -1,7 +1,13 @@
 package com.capsule.shellfies.Helpers;
 
 public class Constants {
+	//================================================================================
+    // Base Constants
+    //================================================================================
 	public static final String LOG = "shellfies";
 	
-	public static final int MAX_CLICK_DURATION = 200;
+	//================================================================================
+    // Separator
+    //================================================================================
+	public static final int ACTIONBAR_DELAY = 50;
 }
