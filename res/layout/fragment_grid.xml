@@ -7,5 +7,13 @@
 	        android:id="@+id/ffContainer"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent" />
-
+	
+	<com.iapps.libs.views.LoadingCompound
+        android:id="@+id/ld"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/White"
+        android:clickable="true"
+        android:visibility="visible" >
+    </com.iapps.libs.views.LoadingCompound>
 </RelativeLayout>
