@@ -6,12 +6,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import roboguice.inject.InjectView;
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
-import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +32,7 @@ import com.iapps.libs.helpers.HTTPAsyncTask;
 import com.iapps.libs.objects.Response;
 import com.iapps.libs.views.LoadingCompound;
 
-public class FragmentGrid extends BaseFragmentShellfies implements OnRefreshListener {
+public class FragmentGrid extends BaseFragmentShellfies {
 	@InjectView(R.id.ffContainer)
 	private FreeFlowContainer		container;
 	@InjectView(R.id.ld)
@@ -47,7 +44,6 @@ public class FragmentGrid extends BaseFragmentShellfies implements OnRefreshList
 	private ArtbookLayout			custom;
 	private VGridLayout				grid;
 	private AdapterGrid				adapter;
-	private PullToRefreshLayout		mPullToRefresh;
 
 	private int						mLimit			= 25;
 	private int						mPage			= 1;
@@ -67,7 +63,6 @@ public class FragmentGrid extends BaseFragmentShellfies implements OnRefreshList
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		mPullToRefresh = getPullToRefresh(view, R.id.ffContainer, this);
 		loadImages();
 	}
 
@@ -141,14 +136,6 @@ public class FragmentGrid extends BaseFragmentShellfies implements OnRefreshList
 	}
 
 	// ================================================================================
-	// Interface Implementations
-	// ================================================================================
-	@Override
-	public void onRefreshStarted(View view) {
-		callApi(API_LOAD_IMAGES);
-	}
-
-	// ================================================================================
 	// Listeners
 	// ================================================================================
 	public class ListenerScroll implements OnScrollListener {
@@ -164,7 +151,6 @@ public class FragmentGrid extends BaseFragmentShellfies implements OnRefreshList
 			// Update value
 			mScrollY = percentY;
 		}
-
 	}
 
 	public class ListenerSwipe extends SwipeHorizontalTouchMotion {
@@ -204,13 +190,10 @@ public class FragmentGrid extends BaseFragmentShellfies implements OnRefreshList
 			if (!ld.isShown()) {
 				ld.showLoading();
 			}
-			Log.d(Constants.LOG, "start loading");
 		}
 
 		@Override
 		protected void onPostExecute(Response response) {
-			Log.d(Constants.LOG, "finish loading");
-
 			ld.hide();
 			JSONObject json = Helper.handleResponse(response, ld);
 			if (json != null) {

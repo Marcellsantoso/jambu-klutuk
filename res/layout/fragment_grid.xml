@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    
-	<com.comcast.freeflow.core.FreeFlowContainer
-	        android:id="@+id/ffContainer"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent" />
-	
-	<com.iapps.libs.views.LoadingCompound
+
+    <com.comcast.freeflow.core.FreeFlowContainer
+        android:id="@+id/ffContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.iapps.libs.views.LoadingCompound
         android:id="@+id/ld"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/White"
         android:clickable="true"
-        android:visibility="visible" >
+        android:visibility="gone" >
     </com.iapps.libs.views.LoadingCompound>
+
 </RelativeLayout>

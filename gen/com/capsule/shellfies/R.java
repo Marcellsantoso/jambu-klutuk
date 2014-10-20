@@ -2823,10 +2823,10 @@ containing a value of this type.
         public static final int yearly_plain=0x7f0a007d;
     }
     public static final class style {
-        public static final int ActionBar_Solid_Shellfies_light=0x7f0b007d;
-        public static final int ActionBar_Transparent_Shellfies_light=0x7f0b007e;
-        public static final int ActionBarTabStyle_Shellfies_light=0x7f0b0081;
-        public static final int ActionButton_CloseMode_Shellfies_light=0x7f0b0084;
+        public static final int ActionBar_Solid_Shellfies_light=0x7f0b007e;
+        public static final int ActionBar_Transparent_Shellfies_light=0x7f0b007f;
+        public static final int ActionBarTabStyle_Shellfies_light=0x7f0b0082;
+        public static final int ActionButton_CloseMode_Shellfies_light=0x7f0b0085;
         /** 
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
@@ -2844,10 +2844,10 @@ containing a value of this type.
         public static final int AppTheme=0x7f0b007b;
         public static final int BetterPickersDialogFragment=0x7f0b0077;
         public static final int BetterPickersDialogFragment_Light=0x7f0b0078;
-        public static final int DropDownListView_Shellfies_light=0x7f0b0080;
-        public static final int DropDownNav_Shellfies_light=0x7f0b0082;
-        public static final int PopupMenu_Shellfies_light=0x7f0b007f;
-        public static final int ProgressBar_Shellfies_light=0x7f0b0083;
+        public static final int DropDownListView_Shellfies_light=0x7f0b0081;
+        public static final int DropDownNav_Shellfies_light=0x7f0b0083;
+        public static final int PopupMenu_Shellfies_light=0x7f0b0080;
+        public static final int ProgressBar_Shellfies_light=0x7f0b0084;
         public static final int RecurrenceDayOfWeekStyle=0x7f0b0074;
         public static final int Sherlock___TextAppearance_Small=0x7f0b0046;
         public static final int Sherlock___Theme=0x7f0b0051;
@@ -2892,10 +2892,10 @@ containing a value of this type.
         public static final int TextAppearance_Sherlock_Widget_PopupMenu_Small=0x7f0b0042;
         public static final int TextAppearance_Sherlock_Widget_TextView_SpinnerItem=0x7f0b0044;
         public static final int Theme_IAPTheme=0x7f0b0059;
-        public static final int Theme_Shellfies_light=0x7f0b007c;
+        public static final int Theme_Shellfies_light=0x7f0b007d;
         /**  this style is only referenced in a Light.DarkActionBar based theme 
          */
-        public static final int Theme_Shellfies_light_Widget=0x7f0b0085;
+        public static final int Theme_Shellfies_light_Widget=0x7f0b0086;
         public static final int Theme_Sherlock=0x7f0b0054;
         public static final int Theme_Sherlock_Light=0x7f0b0055;
         public static final int Theme_Sherlock_Light_DarkActionBar=0x7f0b0056;
@@ -2962,6 +2962,7 @@ containing a value of this type.
         public static final int aosp_ampm_label=0x7f0b006f;
         public static final int aosp_day_of_week_label_condensed=0x7f0b0070;
         public static final int aosp_time_label=0x7f0b006e;
+        public static final int dialog_animation_fade=0x7f0b007c;
         public static final int dialog_button=0x7f0b006b;
         public static final int dialpad=0x7f0b0069;
         public static final int dialpad_text=0x7f0b006a;

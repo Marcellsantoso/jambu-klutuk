@@ -51,4 +51,18 @@ public class PopupImage extends DialogFragment {
 
 		return builder.create();
 	}
+	
+	@Override
+	public void onStart() {
+	  super.onStart();
+
+	  // safety check
+	  if (getDialog() == null) {
+	    return;
+	  }
+
+	  // set the animations to use on showing and hiding the dialog
+	  getDialog().getWindow().setWindowAnimations(
+	      R.style.dialog_animation_fade);
+	}
 }
