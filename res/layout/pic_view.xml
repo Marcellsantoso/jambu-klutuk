@@ -19,11 +19,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ImageView
+    <com.iapps.libs.views.ImageViewLoader
+        android:id="@+id/pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+    </com.iapps.libs.views.ImageViewLoader>
+
+    <!--
+         <ImageView
         android:id="@+id/pic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="1dp"
         android:scaleType="centerCrop" />
+    -->
 
 </LinearLayout>

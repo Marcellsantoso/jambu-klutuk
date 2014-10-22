@@ -30,6 +30,7 @@ import com.comcast.freeflow.core.FreeFlowItem;
 import com.comcast.freeflow.core.Section;
 import com.comcast.freeflow.core.SectionedAdapter;
 import com.iapps.libs.helpers.BaseUIHelper;
+import com.iapps.libs.views.ImageViewLoader;
 
 public class AdapterGrid implements SectionedAdapter {
 
@@ -40,8 +41,9 @@ public class AdapterGrid implements SectionedAdapter {
 
 	private int[]				colors		= new int[] { 0xcc152431, 0xff264C58, 0xffF5C543,
 											0xffE0952C, 0xff9A5325, 0xaaE0952C, 0xaa9A5325,
-			0xaa152431,
-			0xaa264C58, 0xaaF5C543, 0x44264C58, 0x44F5C543, 0x44152431 };
+											0xaa152431,
+											0xaa264C58, 0xaaF5C543, 0x44264C58, 0x44F5C543,
+											0x44152431 };
 
 	private boolean				hideImages	= false;
 
@@ -68,14 +70,16 @@ public class AdapterGrid implements SectionedAdapter {
 			convertView = LayoutInflater.from(context).inflate(
 					R.layout.pic_view, parent, false);
 		}
-		ImageView img = (ImageView) convertView.findViewById(R.id.pic);
+		// ImageView img = (ImageView) convertView.findViewById(R.id.pic);
+		ImageViewLoader img = (ImageViewLoader) convertView.findViewById(R.id.pic);
 		if (hideImages) {
 			int idx = position % colors.length;
 			img.setBackgroundColor(colors[idx]);
 
 		} else {
 			BeanImage bean = (BeanImage) section.getData().get(position);
-			BaseUIHelper.loadImage(context, bean.getUrl(), img);
+			img.loadImage(bean.getUrl());
+			// BaseUIHelper.loadImage(context, bean.getUrl(), img);
 		}
 
 		return convertView;

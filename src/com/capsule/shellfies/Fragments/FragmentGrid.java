@@ -13,6 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.capsule.shellfies.R;
 import com.capsule.shellfies.Adapters.AdapterGrid;
 import com.capsule.shellfies.Helpers.ArtbookLayout;
@@ -64,6 +67,26 @@ public class FragmentGrid extends BaseFragmentShellfies {
 		super.onViewCreated(view, savedInstanceState);
 
 		loadImages();
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		getSherlockActivity().getSupportMenuInflater().inflate(R.menu.menu_refresh, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int itemId = item.getItemId();
+		switch (itemId) {
+			case R.id.menu_refresh:
+				loadImages();
+				getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
+				return true;
+
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 
 	public void loadImages() {
@@ -195,6 +218,8 @@ public class FragmentGrid extends BaseFragmentShellfies {
 		@Override
 		protected void onPostExecute(Response response) {
 			ld.hide();
+			getSherlockActivity().setSupportProgressBarIndeterminateVisibility(false);
+
 			JSONObject json = Helper.handleResponse(response, ld);
 			if (json != null) {
 				try {

@@ -12,26 +12,26 @@ public final class R {
 		public static final int popup_show = 0x7f040005;
 	}
 	public static final class color {
-		public static final int btn_focused = 0x7f07003d;
-		public static final int btn_normal = 0x7f07003e;
-		public static final int btn_pressed = 0x7f07003c;
-		public static final int popup_bg_color = 0x7f07003f;
-		public static final int popup_text_color = 0x7f070041;
-		public static final int separator_color = 0x7f070040;
+		public static final int btn_focused = 0x7f06003d;
+		public static final int btn_normal = 0x7f06003e;
+		public static final int btn_pressed = 0x7f06003c;
+		public static final int popup_bg_color = 0x7f06003f;
+		public static final int popup_text_color = 0x7f060041;
+		public static final int separator_color = 0x7f060040;
 	}
 	public static final class drawable {
 		public static final int ic_action_undo = 0x7f02009b;
-		public static final int popup_bg = 0x7f0200c2;
-		public static final int undo_btn_bg = 0x7f0200ea;
-		public static final int undo_btn_bg_focused = 0x7f0200eb;
-		public static final int undo_btn_bg_pressed = 0x7f0200ec;
+		public static final int popup_bg = 0x7f0200c4;
+		public static final int undo_btn_bg = 0x7f0200ec;
+		public static final int undo_btn_bg_focused = 0x7f0200ed;
+		public static final int undo_btn_bg_pressed = 0x7f0200ee;
 	}
 	public static final class id {
-		public static final int text = 0x7f0500c0;
-		public static final int undo = 0x7f0500c1;
+		public static final int text = 0x7f0900c3;
+		public static final int undo = 0x7f0900c4;
 	}
 	public static final class layout {
-		public static final int undo_popup = 0x7f030045;
+		public static final int undo_popup = 0x7f030046;
 	}
 	public static final class string {
 		public static final int undo = 0x7f0a0084;
