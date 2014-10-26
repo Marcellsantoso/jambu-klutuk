@@ -13,7 +13,7 @@ import com.capsule.shellfies.Objects.BeanImage;
 public class Converter {
 
 	@SuppressWarnings("unused")
-	private Context context;
+	private Context	context;
 
 	private Converter(Context context) {
 		this.context = context;
@@ -34,7 +34,8 @@ public class Converter {
 					alImages.add(o);
 				}
 			}
-		} catch (JSONException e) {
+		}
+		catch (JSONException e) {
 			e.printStackTrace();
 		}
 
@@ -43,8 +44,7 @@ public class Converter {
 
 	public BeanImage toBeanImage(JSONObject jObj) {
 		try {
-			BeanImage obj = new BeanImage();
-			obj.setId(jObj.getInt(Constants.ID));
+			BeanImage obj = new BeanImage(jObj.getInt(Constants.ID), "");
 			obj.setTitle(jObj.getString(Constants.TITLE));
 			obj.setDesc(jObj.getString(Constants.DESC));
 			obj.setUrl(jObj.getString(Constants.IMAGE_URL));
@@ -52,7 +52,8 @@ public class Converter {
 			obj.setCountLike(jObj.getInt(Constants.LIKE_COUNT));
 
 			return obj;
-		} catch (JSONException e) {
+		}
+		catch (JSONException e) {
 			e.printStackTrace();
 		}
 

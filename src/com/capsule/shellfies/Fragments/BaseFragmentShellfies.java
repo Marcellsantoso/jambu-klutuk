@@ -1,14 +1,13 @@
 package com.capsule.shellfies.Fragments;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshLayout;
-import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
-import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
+import roboguice.fragment.RoboFragment;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.capsule.shellfies.Activities.ActivityHome;
 import com.capsule.shellfies.Activities.BaseActivityShellfies;
@@ -16,17 +15,16 @@ import com.capsule.shellfies.Helpers.Api;
 import com.capsule.shellfies.Helpers.Constants;
 import com.capsule.shellfies.Helpers.Converter;
 import com.capsule.shellfies.Helpers.PopupImage;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
+import com.capsule.shellfies.Objects.BeanImage;
 
-public class BaseFragmentShellfies extends RoboSherlockFragment {
-	private long				actionbarDelay	= 0;	// In millis
+public class BaseFragmentShellfies extends RoboFragment {
+	private long		actionbarDelay	= 0;	// In millis
 
-	public Converter			converter;
-	public Api					api;
+	public Converter	converter;
+	public Api			api;
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onViewCreated(view, savedInstanceState);
 		initLoad();
 	}
@@ -45,7 +43,7 @@ public class BaseFragmentShellfies extends RoboSherlockFragment {
 	// ================================================================================
 	// Hide / Show ActionBar
 	// ================================================================================
-	public void displayActionBar(float curY, float prevY) {
+	public void displayActionBar(float curY, float prevY, boolean isHideTop, boolean isHideBot) {
 		// Check delay
 		long curTime = Calendar.getInstance().getTimeInMillis();
 		long diffTime = curTime - actionbarDelay;
@@ -60,8 +58,11 @@ public class BaseFragmentShellfies extends RoboSherlockFragment {
 		} else if ((curY > prevY || curY == 1)
 				&& diffTime > Constants.ACTIONBAR_DELAY) {
 			// Scroll up
-			getHome().hideTopBar();
-			getHome().hideFooter();
+			if (isHideTop)
+				getHome().hideTopBar();
+
+			if (isHideBot)
+				getHome().hideFooter();
 
 			actionbarDelay = curTime;
 		}
@@ -70,23 +71,21 @@ public class BaseFragmentShellfies extends RoboSherlockFragment {
 	// ================================================================================
 	// Commonly used functions
 	// ================================================================================
-	public void showImageDetails(String url) {
-		DialogFragment newFragment = PopupImage.newInstance(url);
-		newFragment.show(getFragmentManager(), "dialog");
+	public void showImageDetails(ArrayList<BeanImage> alImages, int position) {
+		DialogFragment newFragment = new PopupImage(alImages, position);
+		newFragment.show(getActivity().getSupportFragmentManager(), Constants.DIALOG);
 	}
 
+	// ================================================================================
+	// Initializer Function
+	// ================================================================================
 	public void initLoad() {
 		this.converter = Converter.getInstance(getActivity());
 		this.api = Api.getInstance(getActivity());
 	}
 
-	public PullToRefreshLayout getPullToRefresh(View view, int resId, OnRefreshListener listener) {
-		PullToRefreshLayout mPullToRefresh = new PullToRefreshLayout(view.getContext());
-
-		ActionBarPullToRefresh.from(getActivity()).insertLayoutInto((ViewGroup) view)
-				.theseChildrenArePullable(resId)
-				.listener(listener).setup(mPullToRefresh);
-
-		return mPullToRefresh;
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return false;
 	}
+
 }

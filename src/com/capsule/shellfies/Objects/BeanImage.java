@@ -1,8 +1,15 @@
 package com.capsule.shellfies.Objects;
 
-public class BeanImage {
-	int id, countLike, commentCount;
-	String title, desc, url;
+import com.iapps.libs.objects.SimpleBean;
+
+public class BeanImage extends SimpleBean {
+
+	int	id, countLike, commentCount;
+	String	title, desc, url;
+
+	public BeanImage(int id, String name) {
+		super(id, name);
+	}
 
 	public int getId() {
 		return id;

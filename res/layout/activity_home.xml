@@ -10,16 +10,21 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" >
-
     </FrameLayout>
 
     <LinearLayout
         android:id="@+id/llFooter"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/footer_height"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/Blue"
+        android:gravity="right"
         android:orientation="horizontal" >
+
+        <com.capricorn.RayMenu
+            android:id="@+id/menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </com.capricorn.RayMenu>
     </LinearLayout>
 
 </RelativeLayout>

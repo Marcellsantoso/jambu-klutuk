@@ -1,15 +1,17 @@
 package com.capsule.shellfies.Activities;
 
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import com.capsule.shellfies.Helpers.Constants;
 import com.capsule.shellfies.Interfaces.IntContainer;
-import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
 import com.iapps.libs.helpers.BaseUIHelper;
+import com.verano.actionbar4guice.activity.RoboActionBarActivity;
 
-public class BaseActivityShellfies extends RoboSherlockFragmentActivity
+public class BaseActivityShellfies extends RoboActionBarActivity
 		implements IntContainer {
-	private int containerId;
+	private int	containerId;
 
 	// ================================================================================
 	// Fragment Functions
@@ -38,7 +40,6 @@ public class BaseActivityShellfies extends RoboSherlockFragmentActivity
 	 */
 	public void setFragment(Fragment frag) {
 		if (this.containerId > 0) {
-
 			getSupportFragmentManager().beginTransaction()
 					.replace(this.containerId, frag).addToBackStack(null)
 					.commit();
@@ -73,18 +74,17 @@ public class BaseActivityShellfies extends RoboSherlockFragmentActivity
 		this.containerId = containerId;
 	}
 
-	//================================================================================
-    // Behavior Controller
-    //================================================================================
+	// ================================================================================
+	// Behavior Controller
+	// ================================================================================
 	/**
 	 * Controls behavior of the back button
 	 */
 	@Override
 	public void onBackPressed() {
-		super.onBackPressed();
 		// Remove circle loading progress on top right corner
 		setSupportProgressBarIndeterminateVisibility(false);
-		
+
 		// Only close apps when there's no backstack
 		if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
 			BaseActivityShellfies.this.finish();
@@ -104,4 +104,14 @@ public class BaseActivityShellfies extends RoboSherlockFragmentActivity
 		getSupportActionBar().show();
 	}
 
+	// ================================================================================
+	// Commonly used functions
+	// ================================================================================
+	public void dismissDialog() {
+		DialogFragment dialogFragment = (DialogFragment) getSupportFragmentManager()
+				.findFragmentByTag(Constants.DIALOG);
+
+		if (dialogFragment != null)
+			dialogFragment.dismiss();
+	}
 }

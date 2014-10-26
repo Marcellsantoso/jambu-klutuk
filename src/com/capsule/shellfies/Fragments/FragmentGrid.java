@@ -9,13 +9,14 @@ import roboguice.inject.InjectView;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.capsule.shellfies.R;
 import com.capsule.shellfies.Adapters.AdapterGrid;
 import com.capsule.shellfies.Helpers.ArtbookLayout;
@@ -41,19 +42,28 @@ public class FragmentGrid extends BaseFragmentShellfies {
 	@InjectView(R.id.ld)
 	private LoadingCompound			ld;
 
-	private final int				API_LOAD_IMAGES	= 1;
+	private final int				API_LOAD_IMAGES_TIMELINE	= 1;
 
-	private ArrayList<BeanImage>	alImages		= new ArrayList<BeanImage>();
+	private ArrayList<BeanImage>	alImages					= new ArrayList<BeanImage>();
 	private ArtbookLayout			custom;
 	private VGridLayout				grid;
 	private AdapterGrid				adapter;
+	private MenuItem				menu;
 
-	private int						mLimit			= 25;
-	private int						mPage			= 1;
-	private int						mLayoutIndex	= 0;
-	private float					mScrollY		= 0;
+	private int						mLimit						= 25;
+	private int						mPage						= 1;
+	private int						mLayoutIndex				= 0;
+	private float					mScrollY					= 0;
+	private boolean					isRefreshing,
+									isHideTop = true,
+									isHideBot = true;
 
 	private FreeFlowLayout[]		layouts;
+
+	public FragmentGrid(boolean hideTopBar, boolean hideBotBar) {
+		this.isHideTop = hideTopBar;
+		this.isHideBot = hideBotBar;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,14 +75,16 @@ public class FragmentGrid extends BaseFragmentShellfies {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-
+		setHasOptionsMenu(true);
 		loadImages();
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		getSherlockActivity().getSupportMenuInflater().inflate(R.menu.menu_refresh, menu);
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getActivity().getMenuInflater();
+		inflater.inflate(R.menu.menu_refresh, menu);
+		Log.d(Constants.LOG, "kepanggil");
+		return true;
 	}
 
 	@Override
@@ -80,12 +92,29 @@ public class FragmentGrid extends BaseFragmentShellfies {
 		int itemId = item.getItemId();
 		switch (itemId) {
 			case R.id.menu_refresh:
+				menu = item;
+
+				// getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
+				isRefreshing = true;
+
+				// Reset page counter, because user refresh the whole page
+				mPage = 1;
+
 				loadImages();
-				getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
 				return true;
 
 			default:
 				return super.onOptionsItemSelected(item);
+		}
+	}
+
+	public void setMenuIcon() {
+		if (menu != null) {
+			if (isRefreshing) {
+				menu.setVisible(false);
+			} else {
+				menu.setVisible(true);
+			}
 		}
 	}
 
@@ -122,7 +151,7 @@ public class FragmentGrid extends BaseFragmentShellfies {
 		container.addScrollListener(new ListenerScroll());
 		container.setOnTouchListener(new ListenerSwipe(getActivity()));
 
-		callApi(API_LOAD_IMAGES);
+		callApi(API_LOAD_IMAGES_TIMELINE);
 	}
 
 	/**
@@ -148,7 +177,7 @@ public class FragmentGrid extends BaseFragmentShellfies {
 	// ================================================================================
 	public void callApi(int apiTag) {
 		switch (apiTag) {
-			case API_LOAD_IMAGES: {
+			case API_LOAD_IMAGES_TIMELINE: {
 				GetImageAsync gImage = new GetImageAsync();
 				gImage.setUrl(api.getGridAll());
 				gImage.setGetParams(Constants.PAGE, mPage);
@@ -169,7 +198,7 @@ public class FragmentGrid extends BaseFragmentShellfies {
 			float percentY = container.getScrollPercentY();
 
 			// Decide whether to display or show
-			displayActionBar(percentY, mScrollY);
+			displayActionBar(percentY, mScrollY, isHideTop, isHideBot);
 
 			// Update value
 			mScrollY = percentY;
@@ -198,7 +227,7 @@ public class FragmentGrid extends BaseFragmentShellfies {
 
 		@Override
 		public void onItemClick(AbsLayoutContainer parent, FreeFlowItem proxy) {
-			FragmentGrid.this.showImageDetails(alImages.get(proxy.itemIndex).getUrl());
+			FragmentGrid.this.showImageDetails(alImages, proxy.itemIndex);
 		}
 
 	}
@@ -213,16 +242,28 @@ public class FragmentGrid extends BaseFragmentShellfies {
 			if (!ld.isShown()) {
 				ld.showLoading();
 			}
+
+			setMenuIcon();
 		}
 
 		@Override
 		protected void onPostExecute(Response response) {
+			if (!Helper.isValidResponse(response, FragmentGrid.this))
+				return;
+
 			ld.hide();
-			getSherlockActivity().setSupportProgressBarIndeterminateVisibility(false);
+
+			isRefreshing = false;
+			// getSherlockActivity().setSupportProgressBarIndeterminateVisibility(false);
+			setMenuIcon();
 
 			JSONObject json = Helper.handleResponse(response, ld);
 			if (json != null) {
 				try {
+					if (mPage == 1) {
+						alImages.clear();
+					}
+
 					alImages.addAll(converter.toBeanImageArr(json.getJSONArray(Constants.SHOTS)));
 
 					adapter.updateData(alImages);

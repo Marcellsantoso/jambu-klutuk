@@ -2,6 +2,7 @@
 <lint>
     <issue id="ClickableViewAccessibility" severity="ignore" />
     <issue id="ContentDescription" severity="ignore" />
+    <issue id="DisableBaselineAlignment" severity="ignore" />
     <issue id="InflateParams" severity="ignore" />
     <issue id="InnerclassSeparator" severity="ignore" />
     <issue id="NewApi" severity="ignore" />
