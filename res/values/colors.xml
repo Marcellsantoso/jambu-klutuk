@@ -4,5 +4,6 @@
     <color name="shellfies_base_color">#99cc00</color>
     <color name="shellfies_text">#638400</color>
     <color name="shellfies_text_pressed">#000093</color>
+    <color name="shellfies_base_transparent">#5099cc00</color>
 
 </resources>

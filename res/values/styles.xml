@@ -32,4 +32,12 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <!-- ImageButton style -->
+    <style name="ImageButtonGreen" parent="android:Widget.ImageButton">
+        <item name="android:background">@drawable/bg_transparent_xml</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:layout_width">@dimen/minSize</item>
+        <item name="android:layout_height">@dimen/minSize</item>
+    </style>
+
 </resources>

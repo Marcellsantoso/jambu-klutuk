@@ -14,23 +14,31 @@
         <com.iapps.libs.views.ImageViewLoader
             android:id="@+id/imagePopup"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" >
+            android:layout_height="wrap_content" >
         </com.iapps.libs.views.ImageViewLoader>
 
-        <ImageButton
-            android:id="@+id/btnLike"
-            android:layout_width="@dimen/minSize"
-            android:layout_height="@dimen/minSize"
-            android:layout_marginLeft="@dimen/margin_small" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/btnVote"
+                style="@style/ImageButtonGreen"
+                android:src="@drawable/ic_vote_xml" />
+
+            <ImageButton
+                android:id="@+id/btnComment"
+                style="@style/ImageButtonGreen"
+                android:src="@drawable/ic_comment" />
+        </LinearLayout>
 
         <com.capsule.shellfies.Helpers.TextViewComment
             android:id="@+id/tvPopupName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_small"
-            android:layout_marginRight="@dimen/margin_small"
-            android:layout_marginTop="@dimen/margin_small" />
+            android:layout_marginRight="@dimen/margin_small" />
 
         <LinearLayout
             android:id="@+id/llComments"

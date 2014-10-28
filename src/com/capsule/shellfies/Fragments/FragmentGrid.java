@@ -8,11 +8,10 @@ import org.json.JSONObject;
 import roboguice.inject.InjectView;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.view.ActionMode;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,15 +75,10 @@ public class FragmentGrid extends BaseFragmentShellfies {
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		setHasOptionsMenu(true);
-		loadImages();
-	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getActivity().getMenuInflater();
-		inflater.inflate(R.menu.menu_refresh, menu);
-		Log.d(Constants.LOG, "kepanggil");
-		return true;
+		if (alImages.isEmpty())
+			loadImages();
+		// getHome().getSupportActionBar().startActionMode(new ListenerMenu());
 	}
 
 	@Override
@@ -140,7 +134,9 @@ public class FragmentGrid extends BaseFragmentShellfies {
 		// hlayout.setLayoutParams(new
 		// HLayout.LayoutParams(display.widthPixels));
 
-		layouts = new FreeFlowLayout[] { custom, grid, vlayout };
+		layouts = new FreeFlowLayout[] {
+				custom, grid, vlayout
+		};
 		adapter = new AdapterGrid(getActivity(), alImages);
 
 		container.setLayout(layouts[mLayoutIndex]);
@@ -170,6 +166,53 @@ public class FragmentGrid extends BaseFragmentShellfies {
 
 		this.mLayoutIndex = layoutIndex;
 		container.setLayout(layouts[layoutIndex]);
+	}
+
+	// ================================================================================
+	// Menu functions
+	// ================================================================================
+	public class ListenerMenu implements ActionMode.Callback {
+
+		@Override
+		public boolean onActionItemClicked(ActionMode arg0, MenuItem item) {
+			int itemId = item.getItemId();
+			switch (itemId) {
+				case R.id.menu_refresh:
+					menu = item;
+
+					// getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
+					isRefreshing = true;
+
+					// Reset page counter, because user refresh the whole page
+					mPage = 1;
+
+					loadImages();
+					return true;
+
+				default:
+					return false;
+			}
+		}
+
+		@Override
+		public boolean onCreateActionMode(ActionMode arg0, Menu arg1) {
+			// Inflate our menu from a resource file
+			arg0.getMenuInflater().inflate(R.menu.menu_refresh, arg1);
+
+			// Return true so that the action mode is shown
+			return true;
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode arg0) {
+
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode arg0, Menu arg1) {
+			return false;
+		}
+
 	}
 
 	// ================================================================================

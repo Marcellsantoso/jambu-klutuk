@@ -9,21 +9,27 @@ import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.capsule.shellfies.R;
 import com.capsule.shellfies.Helpers.TextViewComment;
 import com.capsule.shellfies.Helpers.UIHelper;
 import com.capsule.shellfies.Objects.BeanComment;
+import com.iapps.libs.objects.ListenerDoubleTap;
 import com.iapps.libs.views.ImageViewLoader;
 
-public class FragmentImageDetails extends BaseFragmentShellfies {
+public class FragmentImageDetails extends BaseFragmentShellfies implements ListenerDoubleTap {
 	@InjectView(R.id.imagePopup)
 	private ImageViewLoader			img;
 	@InjectView(R.id.tvPopupName)
 	private TextViewComment			tvName;
 	@InjectView(R.id.llComments)
 	private LinearLayout			llComments;
+	@InjectView(R.id.btnVote)
+	private ImageButton				btnVote;
+	@InjectView(R.id.btnComment)
+	private ImageButton				btnComment;
 
 	private ArrayList<BeanComment>	alComments	= new ArrayList<BeanComment>();
 	private String					url;
@@ -41,9 +47,15 @@ public class FragmentImageDetails extends BaseFragmentShellfies {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		init();
 		loadName();
 		loadImage();
 		loadComments();
+	}
+
+	public void init() {
+		btnVote.setOnClickListener(new ListenerVote());
+		img.setOnDoubleTapListener(this);
 	}
 
 	public void loadName() {
@@ -53,6 +65,7 @@ public class FragmentImageDetails extends BaseFragmentShellfies {
 	}
 
 	public void loadImage() {
+		// Resize image
 		int screenWidth = UIHelper.getScreenWidth(getActivity());
 		int screenMargin = (int) UIHelper
 				.convertDpToPixel(
@@ -92,6 +105,23 @@ public class FragmentImageDetails extends BaseFragmentShellfies {
 		}
 	}
 
+	// ================================================================================
+	// Listeners
+	// ================================================================================
+	@Override
+	public void onDoubleTap(View v) {
+		btnVote.performClick();
+	}
+
+	class ListenerVote implements View.OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			v.setSelected(!v.isSelected());
+		}
+
+	}
+
 	class ListenerNameClick extends ClickableSpan {
 		BeanComment	comment;
 
@@ -112,4 +142,5 @@ public class FragmentImageDetails extends BaseFragmentShellfies {
 			ds.setUnderlineText(false); // set to false to remove underline
 		}
 	}
+
 }
