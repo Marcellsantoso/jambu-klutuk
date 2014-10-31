@@ -44,12 +44,17 @@ public class Converter {
 
 	public BeanImage toBeanImage(JSONObject jObj) {
 		try {
-			BeanImage obj = new BeanImage(jObj.getInt(Constants.ID), "");
-			obj.setTitle(jObj.getString(Constants.TITLE));
-			obj.setDesc(jObj.getString(Constants.DESC));
-			obj.setUrl(jObj.getString(Constants.IMAGE_URL));
-			obj.setCommentCount(jObj.getInt(Constants.COMMENT_COUNT));
-			obj.setCountLike(jObj.getInt(Constants.LIKE_COUNT));
+			BeanImage obj = new BeanImage();
+			obj.setImageId(jObj.getString(Keys.ID));
+
+			JSONArray jArr = jObj.getJSONArray(Keys.IMAGES);
+			if (jArr.length() > 0){
+				// Get optimum image for details image
+				obj.setUrl(jArr.getJSONObject(0).getString(Keys.SOURCE));
+				
+				// Get smallest image for thumbnails
+				obj.setUrlSmall(jArr.getJSONObject(jArr.length() - 1).getString(Keys.SOURCE));
+			}
 
 			return obj;
 		}

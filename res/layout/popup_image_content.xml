@@ -24,12 +24,12 @@
 
             <ImageButton
                 android:id="@+id/btnVote"
-                style="@style/ImageButtonGreen"
+                style="@style/imgBtnGreen"
                 android:src="@drawable/ic_vote_xml" />
 
             <ImageButton
                 android:id="@+id/btnComment"
-                style="@style/ImageButtonGreen"
+                style="@style/imgBtnGreen"
                 android:src="@drawable/ic_comment" />
         </LinearLayout>
 

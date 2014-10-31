@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical" >
+
+        <com.iapps.libs.views.ButtonIcon
+            android:id="@+id/btnLogin"
+            style="@style/btnHoloBlueDark"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            app:iconLeftSrc="@drawable/ic_facebook"
+            app:text="@string/fb_login"
+            app:textColor="@android:color/white" >
+        </com.iapps.libs.views.ButtonIcon>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pb"
+        style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"
+        android:layout_width="@dimen/progress_small"
+        android:layout_height="@dimen/progress_small"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_small"
+        android:visibility="gone" />
+
+</RelativeLayout>

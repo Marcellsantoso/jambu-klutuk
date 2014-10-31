@@ -12,32 +12,32 @@ public final class R {
 		public static final int popup_show = 0x7f04000b;
 	}
 	public static final class color {
-		public static final int btn_focused = 0x7f050036;
-		public static final int btn_normal = 0x7f050037;
-		public static final int btn_pressed = 0x7f050035;
-		public static final int popup_bg_color = 0x7f050038;
-		public static final int popup_text_color = 0x7f05003a;
-		public static final int separator_color = 0x7f050039;
+		public static final int btn_focused = 0x7f060041;
+		public static final int btn_normal = 0x7f060042;
+		public static final int btn_pressed = 0x7f060040;
+		public static final int popup_bg_color = 0x7f060043;
+		public static final int popup_text_color = 0x7f060045;
+		public static final int separator_color = 0x7f060044;
 	}
 	public static final class drawable {
-		public static final int ic_action_undo = 0x7f020054;
-		public static final int popup_bg = 0x7f020063;
-		public static final int undo_btn_bg = 0x7f020067;
-		public static final int undo_btn_bg_focused = 0x7f020068;
-		public static final int undo_btn_bg_pressed = 0x7f020069;
+		public static final int ic_action_undo = 0x7f020089;
+		public static final int popup_bg = 0x7f02009a;
+		public static final int undo_btn_bg = 0x7f02009e;
+		public static final int undo_btn_bg_focused = 0x7f02009f;
+		public static final int undo_btn_bg_pressed = 0x7f0200a0;
 	}
 	public static final class id {
-		public static final int text = 0x7f0a0078;
-		public static final int undo = 0x7f0a0079;
+		public static final int text = 0x7f0b00a3;
+		public static final int undo = 0x7f0b00a4;
 	}
 	public static final class layout {
-		public static final int undo_popup = 0x7f030028;
+		public static final int undo_popup = 0x7f03003a;
 	}
 	public static final class string {
-		public static final int undo = 0x7f0b000f;
-		public static final int undoall = 0x7f0b0010;
+		public static final int undo = 0x7f07002b;
+		public static final int undoall = 0x7f07002c;
 	}
 	public static final class style {
-		public static final int fade_animation = 0x7f0700ee;
+		public static final int fade_animation = 0x7f0800f1;
 	}
 }

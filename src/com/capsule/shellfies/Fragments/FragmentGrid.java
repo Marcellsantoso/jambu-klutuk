@@ -8,11 +8,10 @@ import org.json.JSONObject;
 import roboguice.inject.InjectView;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.view.ActionMode;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,7 +19,9 @@ import com.capsule.shellfies.R;
 import com.capsule.shellfies.Adapters.AdapterGrid;
 import com.capsule.shellfies.Helpers.ArtbookLayout;
 import com.capsule.shellfies.Helpers.Constants;
+import com.capsule.shellfies.Helpers.CustomSwipeRefreshLayout;
 import com.capsule.shellfies.Helpers.Helper;
+import com.capsule.shellfies.Helpers.Keys;
 import com.capsule.shellfies.Helpers.SwipeHorizontalTouchMotion;
 import com.capsule.shellfies.Objects.BeanImage;
 import com.comcast.freeflow.core.AbsLayoutContainer;
@@ -35,29 +36,29 @@ import com.iapps.libs.helpers.HTTPAsyncTask;
 import com.iapps.libs.objects.Response;
 import com.iapps.libs.views.LoadingCompound;
 
-public class FragmentGrid extends BaseFragmentShellfies {
+public class FragmentGrid extends BaseFragmentShellfies implements OnRefreshListener {
 	@InjectView(R.id.ffContainer)
-	private FreeFlowContainer		container;
+	private FreeFlowContainer			freeFlowContainer;
 	@InjectView(R.id.ld)
-	private LoadingCompound			ld;
+	private LoadingCompound				ld;
+	@InjectView(R.id.swipe_container)
+	private CustomSwipeRefreshLayout	swipeLayout;
 
-	private final int				API_LOAD_IMAGES_TIMELINE	= 1;
+	private final int					API_LOAD_IMAGES_TIMELINE	= 1;
 
-	private ArrayList<BeanImage>	alImages					= new ArrayList<BeanImage>();
-	private ArtbookLayout			custom;
-	private VGridLayout				grid;
-	private AdapterGrid				adapter;
-	private MenuItem				menu;
+	private ArrayList<BeanImage>		alImages					= new ArrayList<BeanImage>();
+	private ArtbookLayout				custom;
+	private VGridLayout					grid;
+	private AdapterGrid					adapter;
 
-	private int						mLimit						= 25;
-	private int						mPage						= 1;
-	private int						mLayoutIndex				= 0;
-	private float					mScrollY					= 0;
-	private boolean					isRefreshing,
-									isHideTop = true,
-									isHideBot = true;
+	private int							mLimit						= 25;
+	private int							mPage						= 1;
+	private int							mLayoutIndex				= 0;
+	private float						mScrollY					= 0;
+	private boolean						isHideTop					= true,
+																	isHideBot = true;
 
-	private FreeFlowLayout[]		layouts;
+	private FreeFlowLayout[]			layouts;
 
 	public FragmentGrid(boolean hideTopBar, boolean hideBotBar) {
 		this.isHideTop = hideTopBar;
@@ -74,42 +75,29 @@ public class FragmentGrid extends BaseFragmentShellfies {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		setHasOptionsMenu(true);
+
+		// TODO : remove this dummy id
+		getPref().setFacebookAlbumId("1115556724456");
+		initializeSwipeLayout();
 
 		if (alImages.isEmpty())
 			loadImages();
-		// getHome().getSupportActionBar().startActionMode(new ListenerMenu());
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		int itemId = item.getItemId();
-		switch (itemId) {
-			case R.id.menu_refresh:
-				menu = item;
+	private void initializeSwipeLayout() {
+		swipeLayout.setFreeFlow(freeFlowContainer);
+		swipeLayout.setOnRefreshListener(this);
+		int actionbarHeight = (int) getActivity().getTheme().obtainStyledAttributes(
+				new int[] {
+					android.R.attr.actionBarSize
+				}).getDimension(0, 0);
+		Log.d(Constants.LOG, "tinggi : " + Integer.toString(actionbarHeight));
+		// swipeLayout.setTopMargin(actionbarHeight + 100);
 
-				// getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
-				isRefreshing = true;
-
-				// Reset page counter, because user refresh the whole page
-				mPage = 1;
-
-				loadImages();
-				return true;
-
-			default:
-				return super.onOptionsItemSelected(item);
-		}
-	}
-
-	public void setMenuIcon() {
-		if (menu != null) {
-			if (isRefreshing) {
-				menu.setVisible(false);
-			} else {
-				menu.setVisible(true);
-			}
-		}
+		// Set four colors used in progress animation
+		swipeLayout.setColorSchemeResources(android.R.color.holo_green_light,
+				android.R.color.holo_orange_light, android.R.color.holo_blue_light,
+				android.R.color.holo_red_light);
 	}
 
 	public void loadImages() {
@@ -139,13 +127,13 @@ public class FragmentGrid extends BaseFragmentShellfies {
 		};
 		adapter = new AdapterGrid(getActivity(), alImages);
 
-		container.setLayout(layouts[mLayoutIndex]);
-		container.setAdapter(adapter);
+		freeFlowContainer.setLayout(layouts[mLayoutIndex]);
+		freeFlowContainer.setAdapter(adapter);
 
 		// Add listeners to this container
-		container.setOnItemClickListener(new ListenerClick());
-		container.addScrollListener(new ListenerScroll());
-		container.setOnTouchListener(new ListenerSwipe(getActivity()));
+		freeFlowContainer.setOnItemClickListener(new ListenerClick());
+		freeFlowContainer.addScrollListener(new ListenerScroll());
+		freeFlowContainer.setOnTouchListener(new ListenerSwipe(getActivity()));
 
 		callApi(API_LOAD_IMAGES_TIMELINE);
 	}
@@ -165,54 +153,12 @@ public class FragmentGrid extends BaseFragmentShellfies {
 		}
 
 		this.mLayoutIndex = layoutIndex;
-		container.setLayout(layouts[layoutIndex]);
+		freeFlowContainer.setLayout(layouts[layoutIndex]);
 	}
 
-	// ================================================================================
-	// Menu functions
-	// ================================================================================
-	public class ListenerMenu implements ActionMode.Callback {
-
-		@Override
-		public boolean onActionItemClicked(ActionMode arg0, MenuItem item) {
-			int itemId = item.getItemId();
-			switch (itemId) {
-				case R.id.menu_refresh:
-					menu = item;
-
-					// getSherlockActivity().setSupportProgressBarIndeterminateVisibility(true);
-					isRefreshing = true;
-
-					// Reset page counter, because user refresh the whole page
-					mPage = 1;
-
-					loadImages();
-					return true;
-
-				default:
-					return false;
-			}
-		}
-
-		@Override
-		public boolean onCreateActionMode(ActionMode arg0, Menu arg1) {
-			// Inflate our menu from a resource file
-			arg0.getMenuInflater().inflate(R.menu.menu_refresh, arg1);
-
-			// Return true so that the action mode is shown
-			return true;
-		}
-
-		@Override
-		public void onDestroyActionMode(ActionMode arg0) {
-
-		}
-
-		@Override
-		public boolean onPrepareActionMode(ActionMode arg0, Menu arg1) {
-			return false;
-		}
-
+	@Override
+	public void onRefresh() {
+		callApi(API_LOAD_IMAGES_TIMELINE);
 	}
 
 	// ================================================================================
@@ -222,9 +168,15 @@ public class FragmentGrid extends BaseFragmentShellfies {
 		switch (apiTag) {
 			case API_LOAD_IMAGES_TIMELINE: {
 				GetImageAsync gImage = new GetImageAsync();
-				gImage.setUrl(api.getGridAll());
-				gImage.setGetParams(Constants.PAGE, mPage);
-				gImage.setGetParams(Constants.PER_PAGE, mLimit);
+				// gImage.setUrl(api.getGridAll());
+				String url = "https://graph.facebook.com/" + getPref().getFacebookAlbumId() +
+						"/photos?access_token=" + getPref().getFacebookSession();
+				Log.d(Constants.LOG, "url : " + url);
+				// Session session = Session.getActiveSession();
+				// Log.d(Constants.LOG, "access token : " + session.getAccessToken());
+				gImage.setUrl(url);
+				gImage.setGetParams(Keys.PAGE, mPage);
+				gImage.setGetParams(Keys.PER_PAGE, mLimit);
 				gImage.execute();
 			}
 		}
@@ -285,8 +237,6 @@ public class FragmentGrid extends BaseFragmentShellfies {
 			if (!ld.isShown()) {
 				ld.showLoading();
 			}
-
-			setMenuIcon();
 		}
 
 		@Override
@@ -295,10 +245,7 @@ public class FragmentGrid extends BaseFragmentShellfies {
 				return;
 
 			ld.hide();
-
-			isRefreshing = false;
-			// getSherlockActivity().setSupportProgressBarIndeterminateVisibility(false);
-			setMenuIcon();
+			swipeLayout.setRefreshing(false);
 
 			JSONObject json = Helper.handleResponse(response, ld);
 			if (json != null) {
@@ -307,11 +254,11 @@ public class FragmentGrid extends BaseFragmentShellfies {
 						alImages.clear();
 					}
 
-					alImages.addAll(converter.toBeanImageArr(json.getJSONArray(Constants.SHOTS)));
+					alImages.addAll(converter.toBeanImageArr(json.getJSONArray(Keys.DATA)));
 
 					adapter.updateData(alImages);
-					container.notifyDataSetChanged();
-					container.dataInvalidated(true);
+					freeFlowContainer.notifyDataSetChanged();
+					freeFlowContainer.dataInvalidated(true);
 				}
 				catch (JSONException e) {
 					ld.showError("", e.getMessage());

@@ -37,10 +37,12 @@ public class AdapterGrid implements SectionedAdapter {
 	private Context				context;
 	private Section				section;
 
-	private int[]				colors		= new int[] { 0xcc152431, 0xff264C58, 0xffF5C543,
-											0xffE0952C, 0xff9A5325, 0xaaE0952C, 0xaa9A5325,
-											0xaa152431, 0xaa264C58, 0xaaF5C543, 0x44264C58,
-											0x44F5C543, 0x44152431 };
+	private int[]				colors		= new int[] {
+			0xcc152431, 0xff264C58, 0xffF5C543,
+			0xffE0952C, 0xff9A5325, 0xaaE0952C, 0xaa9A5325,
+			0xaa152431, 0xaa264C58, 0xaaF5C543, 0x44264C58,
+			0x44F5C543, 0x44152431
+											};
 
 	private boolean				hideImages	= false;
 
@@ -67,7 +69,7 @@ public class AdapterGrid implements SectionedAdapter {
 			convertView = LayoutInflater.from(context).inflate(
 					R.layout.pic_view, parent, false);
 		}
-		// ImageView img = (ImageView) convertView.findViewById(R.id.pic);
+
 		ImageViewLoader img = (ImageViewLoader) convertView.findViewById(R.id.pic);
 		img.setTag(position);
 
@@ -77,7 +79,7 @@ public class AdapterGrid implements SectionedAdapter {
 
 		} else {
 			BeanImage bean = (BeanImage) section.getData().get(position);
-			img.loadImage(bean.getUrl());
+			img.loadImage(bean.getUrlSmall());
 		}
 
 		return convertView;
@@ -104,7 +106,9 @@ public class AdapterGrid implements SectionedAdapter {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Class[] getViewTypes() {
-		return new Class[] { LinearLayout.class };
+		return new Class[] {
+				LinearLayout.class
+		};
 	}
 
 	@SuppressWarnings("rawtypes")

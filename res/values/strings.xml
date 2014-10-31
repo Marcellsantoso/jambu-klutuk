@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">shellfies</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <!-- DEFAULT -->
+    <string name="app_name">Shellfies</string>
+
+    <!-- MENU -->
     <string name="menu_refresh">Refresh</string>
 
+    <!-- SHELLFIES COMMON -->
     <string name="photos">Photos</string>
     <string name="follows">Follows</string>
     <string name="followers">Followers</string>
+
+    <!-- FACEBOOK MESSAGES -->
+    <string name="fb_app_id">1526271937612335</string>
+    <string name="fb_app_secret">d40c6b7fa7ecbeda3abb7980acdde0d3</string>
+    <string name="fb_login">Login with Facebook</string>
+    <string name="fb_signup">Sign up with Facebook</string>
+
+    <!-- ERROR MESSAGES -->
+    <string name="err_title">Error</string>
+    <string name="err_facebook">Couldn\'t login to Facebook</string>
+
 </resources>

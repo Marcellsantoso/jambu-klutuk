@@ -1,17 +1,49 @@
 package com.capsule.shellfies.Activities;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.Signature;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Base64;
+import android.util.Log;
 
 import com.capsule.shellfies.Helpers.Constants;
+import com.capsule.shellfies.Helpers.Preference;
 import com.capsule.shellfies.Interfaces.IntContainer;
+import com.facebook.AppEventsLogger;
 import com.iapps.libs.helpers.BaseUIHelper;
 import com.verano.actionbar4guice.activity.RoboActionBarActivity;
 
 public class BaseActivityShellfies extends RoboActionBarActivity
 		implements IntContainer {
+
 	private int	containerId;
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+
+		// Facebook statistics
+		AppEventsLogger.activateApp(this);
+
+		if (Constants.IS_DEBUGGING)
+			printHash();
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+
+		// Facebook statistics
+		AppEventsLogger.deactivateApp(this);
+	}
 
 	// ================================================================================
 	// Fragment Functions
@@ -45,7 +77,7 @@ public class BaseActivityShellfies extends RoboActionBarActivity
 					.commit();
 
 			getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-			setSupportProgressBarIndeterminateVisibility(false);
+			// setSupportProgressBarIndeterminateVisibility(false);
 
 			// Hide keyboard by default when changing fragment
 			BaseUIHelper.hideKeyboard(this);
@@ -113,5 +145,31 @@ public class BaseActivityShellfies extends RoboActionBarActivity
 
 		if (dialogFragment != null)
 			dialogFragment.dismiss();
+	}
+
+	public Preference getPref() {
+		return Preference.getInstance(this);
+	}
+
+	// ================================================================================
+	// Credentials
+	// ================================================================================
+	public void printHash() {
+		try {
+			PackageInfo info = getPackageManager().getPackageInfo(
+					"com.capsule.shellfies", PackageManager.GET_SIGNATURES);
+			for (Signature signature : info.signatures) {
+				MessageDigest md = MessageDigest.getInstance("SHA");
+				md.update(signature.toByteArray());
+				Log.d(Constants.LOG, "Hash : " + Base64.encodeToString(md.digest(), Base64.DEFAULT));
+
+			}
+		}
+		catch (NameNotFoundException e) {
+
+		}
+		catch (NoSuchAlgorithmException e) {
+
+		}
 	}
 }

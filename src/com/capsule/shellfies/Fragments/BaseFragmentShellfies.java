@@ -15,6 +15,7 @@ import com.capsule.shellfies.Helpers.Api;
 import com.capsule.shellfies.Helpers.Constants;
 import com.capsule.shellfies.Helpers.Converter;
 import com.capsule.shellfies.Helpers.PopupImage;
+import com.capsule.shellfies.Helpers.Preference;
 import com.capsule.shellfies.Objects.BeanImage;
 
 public class BaseFragmentShellfies extends RoboFragment {
@@ -74,6 +75,10 @@ public class BaseFragmentShellfies extends RoboFragment {
 	public void showImageDetails(ArrayList<BeanImage> alImages, int position) {
 		DialogFragment newFragment = new PopupImage(alImages, position);
 		newFragment.show(getActivity().getSupportFragmentManager(), Constants.DIALOG);
+	}
+
+	public Preference getPref() {
+		return getBaseActivity().getPref();
 	}
 
 	// ================================================================================
