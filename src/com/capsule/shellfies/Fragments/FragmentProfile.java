@@ -59,7 +59,9 @@ public class FragmentProfile extends BaseFragmentShellfies {
 		tvCountFollower.setText("91");
 		tvCountPhoto.setText("11");
 
-		getHome().getSupportActionBar().setTitle(name);
+		getActionbar().setTitle(name);
+		getActionbar().setDisplayHomeAsUpEnabled(true);
+		getHome().showTopBar();
 
 		// Add top margin to the header info
 		LinearLayout.LayoutParams params = (LayoutParams) llHeader.getLayoutParams();
@@ -67,7 +69,11 @@ public class FragmentProfile extends BaseFragmentShellfies {
 				.getResources().getDimension(R.dimen.margin_small));
 		llHeader.setLayoutParams(params);
 
-		getActivity().getSupportFragmentManager().beginTransaction()
-				.replace(R.id.flGrid, new FragmentGrid(false, true)).commit();
+		getActivity()
+				.getSupportFragmentManager()
+				.beginTransaction()
+				.replace(R.id.flGrid,
+						new FragmentGrid(FragmentGrid.API_LOAD_IMAGES_PROFILE))
+				.commit();
 	}
 }

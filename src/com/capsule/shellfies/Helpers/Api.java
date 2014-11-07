@@ -4,7 +4,7 @@ import android.content.Context;
 
 public class Api {
 	@SuppressWarnings("unused")
-	private Context context;
+	private Context	context;
 
 	private Api(Context context) {
 		this.context = context;
@@ -19,5 +19,12 @@ public class Api {
 		return GRID_LOAD_ALL;
 	}
 
-	private final String GRID_LOAD_ALL = "http://api.dribbble.com/shots/popular";
+	private final String		GRID_LOAD_ALL	= "http://api.dribbble.com/shots/popular";
+
+	// ================================================================================
+	// Public APIs
+	// ================================================================================
+	public static final String	FACEBOOK_BASE	= "https://graph.facebook.com/";
+	public static final String	FACEBOOK_ALBUM	= "me/albums";
+	public static final String	FACEBOOK_PHOTO	= "me/photos";
 }

@@ -10,15 +10,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.capsule.shellfies.R;
 import com.capsule.shellfies.Adapters.AdapterGrid;
+import com.capsule.shellfies.Helpers.Api;
 import com.capsule.shellfies.Helpers.ArtbookLayout;
-import com.capsule.shellfies.Helpers.Constants;
 import com.capsule.shellfies.Helpers.CustomSwipeRefreshLayout;
 import com.capsule.shellfies.Helpers.Helper;
 import com.capsule.shellfies.Helpers.Keys;
@@ -44,7 +43,8 @@ public class FragmentGrid extends BaseFragmentShellfies implements OnRefreshList
 	@InjectView(R.id.swipe_container)
 	private CustomSwipeRefreshLayout	swipeLayout;
 
-	private final int					API_LOAD_IMAGES_TIMELINE	= 1;
+	public static final int				API_LOAD_IMAGES_TIMELINE	= 1,
+																	API_LOAD_IMAGES_PROFILE = 2;
 
 	private ArrayList<BeanImage>		alImages					= new ArrayList<BeanImage>();
 	private ArtbookLayout				custom;
@@ -54,15 +54,15 @@ public class FragmentGrid extends BaseFragmentShellfies implements OnRefreshList
 	private int							mLimit						= 25;
 	private int							mPage						= 1;
 	private int							mLayoutIndex				= 0;
+	private int							apiTag;
 	private float						mScrollY					= 0;
-	private boolean						isHideTop					= true,
-																	isHideBot = true;
 
 	private FreeFlowLayout[]			layouts;
 
-	public FragmentGrid(boolean hideTopBar, boolean hideBotBar) {
-		this.isHideTop = hideTopBar;
-		this.isHideBot = hideBotBar;
+	public FragmentGrid() {}
+
+	public FragmentGrid(int apiTag) {
+		this.apiTag = apiTag;
 	}
 
 	@Override
@@ -75,24 +75,21 @@ public class FragmentGrid extends BaseFragmentShellfies implements OnRefreshList
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-
 		// TODO : remove this dummy id
-		getPref().setFacebookAlbumId("1115556724456");
-		initializeSwipeLayout();
+		// getPref().setFacebookAlbumId("1115556724456");
 
-		if (alImages.isEmpty())
-			loadImages();
+		initializeSwipeLayout();
+		loadImages();
+
+		if (alImages.isEmpty() || getHome().isActionChanged()) {
+			callApi();
+		} else
+			ld.hide();
 	}
 
 	private void initializeSwipeLayout() {
 		swipeLayout.setFreeFlow(freeFlowContainer);
 		swipeLayout.setOnRefreshListener(this);
-		int actionbarHeight = (int) getActivity().getTheme().obtainStyledAttributes(
-				new int[] {
-					android.R.attr.actionBarSize
-				}).getDimension(0, 0);
-		Log.d(Constants.LOG, "tinggi : " + Integer.toString(actionbarHeight));
-		// swipeLayout.setTopMargin(actionbarHeight + 100);
 
 		// Set four colors used in progress animation
 		swipeLayout.setColorSchemeResources(android.R.color.holo_green_light,
@@ -134,8 +131,6 @@ public class FragmentGrid extends BaseFragmentShellfies implements OnRefreshList
 		freeFlowContainer.setOnItemClickListener(new ListenerClick());
 		freeFlowContainer.addScrollListener(new ListenerScroll());
 		freeFlowContainer.setOnTouchListener(new ListenerSwipe(getActivity()));
-
-		callApi(API_LOAD_IMAGES_TIMELINE);
 	}
 
 	/**
@@ -158,27 +153,34 @@ public class FragmentGrid extends BaseFragmentShellfies implements OnRefreshList
 
 	@Override
 	public void onRefresh() {
-		callApi(API_LOAD_IMAGES_TIMELINE);
+		callApi();
 	}
 
 	// ================================================================================
 	// AsyncTask Methods
 	// ================================================================================
-	public void callApi(int apiTag) {
+	public void callApi() {
 		switch (apiTag) {
-			case API_LOAD_IMAGES_TIMELINE: {
+			case API_LOAD_IMAGES_TIMELINE:
 				GetImageAsync gImage = new GetImageAsync();
 				// gImage.setUrl(api.getGridAll());
-				String url = "https://graph.facebook.com/" + getPref().getFacebookAlbumId() +
+				String urlTest = Api.FACEBOOK_BASE + getPref().getFacebookAlbumId() +
 						"/photos?access_token=" + getPref().getFacebookSession();
-				Log.d(Constants.LOG, "url : " + url);
-				// Session session = Session.getActiveSession();
-				// Log.d(Constants.LOG, "access token : " + session.getAccessToken());
-				gImage.setUrl(url);
+				gImage.setUrl(urlTest);
 				gImage.setGetParams(Keys.PAGE, mPage);
 				gImage.setGetParams(Keys.PER_PAGE, mLimit);
 				gImage.execute();
-			}
+				break;
+
+			case API_LOAD_IMAGES_PROFILE:
+				GetImageAsync gProfile = new GetImageAsync();
+				String url = Api.FACEBOOK_BASE + getPref().getFacebookAlbumId() +
+						"/photos?access_token=" + getPref().getFacebookSession();
+				gProfile.setUrl(url);
+				gProfile.setGetParams(Keys.PAGE, mPage);
+				gProfile.setGetParams(Keys.PER_PAGE, mLimit);
+				gProfile.execute();
+				break;
 		}
 	}
 
@@ -193,7 +195,7 @@ public class FragmentGrid extends BaseFragmentShellfies implements OnRefreshList
 			float percentY = container.getScrollPercentY();
 
 			// Decide whether to display or show
-			displayActionBar(percentY, mScrollY, isHideTop, isHideBot);
+			displayActionBar(percentY, mScrollY);
 
 			// Update value
 			mScrollY = percentY;
@@ -254,6 +256,10 @@ public class FragmentGrid extends BaseFragmentShellfies implements OnRefreshList
 						alImages.clear();
 					}
 
+					alImages.addAll(converter.toBeanImageArr(json.getJSONArray(Keys.DATA)));
+					alImages.addAll(converter.toBeanImageArr(json.getJSONArray(Keys.DATA)));
+					alImages.addAll(converter.toBeanImageArr(json.getJSONArray(Keys.DATA)));
+					alImages.addAll(converter.toBeanImageArr(json.getJSONArray(Keys.DATA)));
 					alImages.addAll(converter.toBeanImageArr(json.getJSONArray(Keys.DATA)));
 
 					adapter.updateData(alImages);

@@ -15,12 +15,12 @@
             android:layout_height="match_parent" />
     </com.capsule.shellfies.Helpers.CustomSwipeRefreshLayout>
 
-        <com.iapps.libs.views.LoadingCompound
-            android:id="@+id/ld"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/White"
-            android:clickable="true" >
-        </com.iapps.libs.views.LoadingCompound>
+    <com.iapps.libs.views.LoadingCompound
+        android:id="@+id/ld"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/White"
+        android:clickable="true" >
+    </com.iapps.libs.views.LoadingCompound>
 
 </RelativeLayout>

@@ -7,12 +7,14 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Base64;
 import android.util.Log;
 
+import com.capsule.shellfies.R;
 import com.capsule.shellfies.Helpers.Constants;
 import com.capsule.shellfies.Helpers.Preference;
 import com.capsule.shellfies.Interfaces.IntContainer;
@@ -23,7 +25,8 @@ import com.verano.actionbar4guice.activity.RoboActionBarActivity;
 public class BaseActivityShellfies extends RoboActionBarActivity
 		implements IntContainer {
 
-	private int	containerId;
+	private Drawable	bgActionbar;
+	private int			containerId;
 
 	@Override
 	protected void onStart() {
@@ -119,7 +122,7 @@ public class BaseActivityShellfies extends RoboActionBarActivity
 
 		// Only close apps when there's no backstack
 		if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
-			BaseActivityShellfies.this.finish();
+			finish();
 		} else {
 			super.onBackPressed();
 		}
@@ -129,11 +132,20 @@ public class BaseActivityShellfies extends RoboActionBarActivity
 	// Hide / Show ActionBar functions
 	// ================================================================================
 	public void hideTopBar() {
-		getSupportActionBar().hide();
+		if (bgActionbar == null)
+			bgActionbar = getResources().getDrawable(R.drawable.bg_actionbar);
+
+		bgActionbar.setAlpha(0);
+		getSupportActionBar().setBackgroundDrawable(bgActionbar);
+		getSupportActionBar().setTitle("");
 	}
 
 	public void showTopBar() {
-		getSupportActionBar().show();
+		if (bgActionbar == null)
+			bgActionbar = getResources().getDrawable(R.drawable.bg_actionbar);
+
+		bgActionbar.setAlpha(255);
+		getSupportActionBar().setBackgroundDrawable(bgActionbar);
 	}
 
 	// ================================================================================

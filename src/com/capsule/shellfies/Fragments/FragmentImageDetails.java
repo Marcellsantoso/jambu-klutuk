@@ -8,7 +8,9 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
@@ -30,9 +32,13 @@ public class FragmentImageDetails extends BaseFragmentShellfies implements Liste
 	private ImageButton				btnVote;
 	@InjectView(R.id.btnComment)
 	private ImageButton				btnComment;
+	@InjectView(R.id.edtComment)
+	private EditText				edtComment;
 
 	private ArrayList<BeanComment>	alComments	= new ArrayList<BeanComment>();
 	private String					url;
+
+	private final int				TAG_VOTE	= 1, TAG_COMMENT = 2;
 
 	public FragmentImageDetails(String url) {
 		this.url = url;
@@ -54,7 +60,10 @@ public class FragmentImageDetails extends BaseFragmentShellfies implements Liste
 	}
 
 	public void init() {
-		btnVote.setOnClickListener(new ListenerVote());
+		btnVote.setOnClickListener(ListenerClick);
+		btnVote.setTag(TAG_VOTE);
+		btnComment.setOnClickListener(ListenerClick);
+		btnComment.setTag(TAG_COMMENT);
 		img.setOnDoubleTapListener(this);
 	}
 
@@ -77,6 +86,13 @@ public class FragmentImageDetails extends BaseFragmentShellfies implements Liste
 
 		// Load image from url
 		img.loadImage(url);
+	}
+
+	// ================================================================================
+	// Comment functions
+	// ================================================================================
+	public void activateCommentBox() {
+		edtComment.requestFocus();
 	}
 
 	public void loadComments() {
@@ -113,14 +129,21 @@ public class FragmentImageDetails extends BaseFragmentShellfies implements Liste
 		btnVote.performClick();
 	}
 
-	class ListenerVote implements View.OnClickListener {
+	View.OnClickListener	ListenerClick	= new OnClickListener() {
 
-		@Override
-		public void onClick(View v) {
-			v.setSelected(!v.isSelected());
-		}
+												@Override
+												public void onClick(View v) {
+													switch ((Integer) v.getTag()) {
+														case TAG_VOTE:
+															v.setSelected(!v.isSelected());
+															break;
 
-	}
+														case TAG_COMMENT:
+															activateCommentBox();
+															break;
+													}
+												}
+											};
 
 	class ListenerNameClick extends ClickableSpan {
 		BeanComment	comment;

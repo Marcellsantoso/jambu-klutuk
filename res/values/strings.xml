@@ -6,17 +6,36 @@
 
     <!-- MENU -->
     <string name="menu_refresh">Refresh</string>
+    <string name="menu_done">Done</string>
 
     <!-- SHELLFIES COMMON -->
     <string name="photos">Photos</string>
     <string name="follows">Follows</string>
     <string name="followers">Followers</string>
 
+    <!-- PAGE TITLE -->
+    <string name="title_upload">Upload selfie</string>
+    <string name="title">@string/app_name</string>
+
     <!-- FACEBOOK MESSAGES -->
-    <string name="fb_app_id">1526271937612335</string>
-    <string name="fb_app_secret">d40c6b7fa7ecbeda3abb7980acdde0d3</string>
     <string name="fb_login">Login with Facebook</string>
     <string name="fb_signup">Sign up with Facebook</string>
+
+    <!-- exruinz@gmail.com account -->
+    <!--
+    <string name="fb_app_id">1526271937612335</string>
+    <string name="fb_app_secret">d40c6b7fa7ecbeda3abb7980acdde0d3</string>
+    -->
+
+
+    <!-- Dev account - marcel@leap-systems.com -->
+    <string name="fb_app_id">1512031245724733</string>
+    <string name="fb_app_secret">482b9640b3743051acb8db924daa9fe2</string>
+
+    <!-- COMMON MESSAGES -->
+    <string name="msg_create_album">Creating album..</string>
+    <string name="msg_upload_photo">Uploading photo..</string>
+    <string name="msg_upload_success">Your photo is successfully uploaded</string>
 
     <!-- ERROR MESSAGES -->
     <string name="err_title">Error</string>

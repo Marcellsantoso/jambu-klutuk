@@ -6,6 +6,8 @@ import java.util.Calendar;
 import roboguice.fragment.RoboFragment;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.View;
 
@@ -41,10 +43,16 @@ public class BaseFragmentShellfies extends RoboFragment {
 		return (ActivityHome) getActivity();
 	}
 
+	public void setFragment(Fragment frag, int container) {
+		getChildFragmentManager().beginTransaction()
+				.replace(container, frag)
+				.commit();
+	}
+
 	// ================================================================================
 	// Hide / Show ActionBar
 	// ================================================================================
-	public void displayActionBar(float curY, float prevY, boolean isHideTop, boolean isHideBot) {
+	public void displayActionBar(float curY, float prevY) {
 		// Check delay
 		long curTime = Calendar.getInstance().getTimeInMillis();
 		long diffTime = curTime - actionbarDelay;
@@ -52,18 +60,18 @@ public class BaseFragmentShellfies extends RoboFragment {
 		if ((curY < prevY || curY == 0)
 				&& diffTime > Constants.ACTIONBAR_DELAY) {
 			// Scroll down
-			getHome().showTopBar();
+			// getHome().showTopBar();
 			getHome().showFooter();
 
 			actionbarDelay = curTime;
 		} else if ((curY > prevY || curY == 1)
 				&& diffTime > Constants.ACTIONBAR_DELAY) {
 			// Scroll up
-			if (isHideTop)
-				getHome().hideTopBar();
+			// if (isHideTop)
+			// getHome().hideTopBar();
 
-			if (isHideBot)
-				getHome().hideFooter();
+			// if (isHideBot)
+			getHome().hideFooter();
 
 			actionbarDelay = curTime;
 		}
@@ -79,6 +87,10 @@ public class BaseFragmentShellfies extends RoboFragment {
 
 	public Preference getPref() {
 		return getBaseActivity().getPref();
+	}
+
+	public ActionBar getActionbar() {
+		return getBaseActivity().getSupportActionBar();
 	}
 
 	// ================================================================================

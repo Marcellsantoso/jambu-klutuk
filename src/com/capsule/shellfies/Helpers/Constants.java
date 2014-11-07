@@ -1,6 +1,8 @@
 package com.capsule.shellfies.Helpers;
 
-public class Constants {
+import com.iapps.libs.helpers.BaseConstants;
+
+public class Constants extends BaseConstants {
 	// ================================================================================
 	// Base Constants
 	// ================================================================================

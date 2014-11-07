@@ -7,7 +7,6 @@ import roboguice.inject.InjectView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,7 +15,6 @@ import android.widget.ProgressBar;
 
 import com.capsule.shellfies.R;
 import com.capsule.shellfies.Activities.ActivityHome;
-import com.capsule.shellfies.Helpers.Constants;
 import com.capsule.shellfies.Helpers.Helper;
 import com.capsule.shellfies.Helpers.Keys;
 import com.facebook.Request;
@@ -39,7 +37,7 @@ public class FragmentLogin extends BaseFragmentShellfies {
 	private final int				TAG_LOGIN				= 1;
 
 	private static final String[]	FACEBOOK_PERMISSIONS	= {
-			"user_photos", "user_birthday", "email"
+			"user_photos", "user_birthday", "email", "publish_actions"
 															};
 
 	@Override
@@ -82,7 +80,7 @@ public class FragmentLogin extends BaseFragmentShellfies {
 		Session session = Session.getActiveSession();
 
 		if (!session.isOpened() && !session.isClosed()) {
-			session.openForRead(new Session.OpenRequest(this)
+			session.openForPublish(new Session.OpenRequest(this)
 					.setLoginBehavior(SessionLoginBehavior.SSO_WITH_FALLBACK)
 					.setCallback(statusCallback)
 					.setPermissions(FACEBOOK_PERMISSIONS));
@@ -174,8 +172,6 @@ public class FragmentLogin extends BaseFragmentShellfies {
 					String fbId = map.get(Keys.ID).toString();
 					getPref().setFacebookId(fbId);
 					// call login webservice
-
-					Log.d(Constants.LOG, "success login");
 
 					// Save user_id
 					getPref().setUserId(11);

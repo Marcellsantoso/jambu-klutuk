@@ -50,6 +50,28 @@
             android:dividerPadding="@dimen/margin_small"
             android:orientation="vertical" >
         </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <EditText
+                android:id="@+id/edtComment"
+                style="@style/edtGreen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_toLeftOf="@+id/btnSend"
+                android:ems="10" >
+            </EditText>
+
+            <ImageButton
+                android:id="@+id/btnSend"
+                style="@style/imgBtnGreen"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_send_comment" />
+        </RelativeLayout>
     </LinearLayout>
 
 </ScrollView>
